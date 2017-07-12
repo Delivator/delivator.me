@@ -1,4 +1,4 @@
-var console = document.getElementById("console"),
+var consoleElement = document.getElementById("console"),
     userInfo = document.getElementById("userInfo");
 
 function getIp(callback) {
@@ -15,5 +15,5 @@ function getIp(callback) {
 }
 
 getIp(function (ip) {
-  console.innerHTML += "New user connected from " + ip.city + ", " + ip.region_code + ", " + ip.country_code + ". IP: " + ip.ip + "<br />";
+  consoleElement.innerHTML += "New user connected from " + ip.city + ", " + ip.region_code + ", " + ip.country_code + ". IP: " + ip.ip + "<br />";
 });
