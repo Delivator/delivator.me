@@ -3,6 +3,7 @@ body {
   background-color: #000;
   color: #0f0;
   font-family: 'Consolas';
+  font-size: 15px;
 }
 
 #consoleInput {
@@ -22,4 +23,8 @@ body {
 
 #linestart {
   margin-right: .5em;
+}
+
+#console {
+  margin: 0;
 }
