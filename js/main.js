@@ -3,11 +3,13 @@ var messages = {
   "welcome": "IF9fX19fICAgICAgIF8gXyAgICAgICAgICAgIF8gCnwgIF9fIFwgICAgIHwgKF8pICAgICAgICAgIHwgfAp8IHwgIHwgfCBfX198IHxfX18gICBfX19fIF98IHxfIF9fXyAgXyBfXyBfIF9fIF9fXyAgIF9fXyAKfCB8ICB8IHwvIF8gXCB8IFwgXCAvIC8gX2AgfCBfXy8gXyBcfCAnX198ICdfIGAgXyBcIC8gXyBcCnwgfF9ffCB8ICBfXy8gfCB8XCBWIC8gKF98IHwgfHwgKF8pIHwgfF8gfCB8IHwgfCB8IHwgIF9fLwp8X19fX18vIFxfX198X3xffCBcXy8gXF9fLF98XF9fXF9fXy98XyhfKXxffCB8X3wgfF98XF9fX3wK"
 };
 
+var encodedMessage = atob(messages.welcome);
+
 (function myLoop (i) {
   setTimeout(function () {
-    consoleElement.innerHTML += atob(messages.welcome)[i];
-    if (++i < atob(messages.welcome).length) myLoop(i);
-  }, 1)
+    consoleElement.innerHTML += encodedMessage[i];
+    if (++i < encodedMessage.length) myLoop(i);
+  }, 5)
 })(0);
 
 function getIp(callback) {
