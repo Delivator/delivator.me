@@ -13,6 +13,7 @@ body {
   font-family: 'Consolas';
   box-sizing : border-box;
   border: none;
+  font-size: 15px;
 }
 
 #consoleInput:focus {outline:0;}

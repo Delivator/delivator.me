@@ -1,5 +1,6 @@
 var consoleElement = document.getElementById("console"),
     consoleInput = document.getElementById("consoleInput"),
+    linestart = document.getElementById("linestart"),
     textToAdd = "";
 var messages = {
   "welcome": "IF9fX19fICAgICAgIF8gXyAgICAgICAgICAgIF8gCnwgIF9fIFwgICAgIHwgKF8pICAgICAgICAgIHwgfAp8IHwgIHwgfCBfX198IHxfX18gICBfX19fIF98IHxfIF9fXyAgXyBfXyBfIF9fIF9fXyAgIF9fXyAKfCB8ICB8IHwvIF8gXCB8IFwgXCAvIC8gX2AgfCBfXy8gXyBcfCAnX198ICdfIGAgXyBcIC8gXyBcCnwgfF9ffCB8ICBfXy8gfCB8XCBWIC8gKF98IHwgfHwgKF8pIHwgfF8gfCB8IHwgfCB8IHwgIF9fLwp8X19fX18vIFxfX198X3xffCBcXy8gXF9fLF98XF9fXF9fXy98XyhfKXxffCB8X3wgfF98XF9fX3wKCgo="
@@ -32,10 +33,50 @@ function getIp(callback) {
   xhttp.send();
 }
 
+function executeCommand(command) {
+  var cmd = command.split(" ")[0],
+      args = command.split(" ").slice(1);
+  if (linestart.innerHTML.startsWith("anonymous") && cmd != "login") {
+    addText("You have to login first.\n");
+    addText("Use login <username> to login.\n");
+  }
+  switch (cmd) {
+    case "login":
+      if (!linestart.innerHTML.startsWith("anonymous")) {
+        addText("Already logged in.\n");
+        return;
+      }
+      if (args[0] == null) {
+        addText("Usage: login <username>\n");
+      } else {
+        addText("Successfully logged in as '" + args[0] + "'.\n");
+        getIp(function(ip) {
+          addText("New user connected from " + ip.city + ", " + ip.region_code + ", " + ip.country_code + ". IP: " + ip.ip + "\n");
+        });
+        linestart.innerHTML = args[0] + "@delivator.me:~$ ";
+      }
+      break;
+    default:
+  }
+}
+
 setInterval(updateConsole, 5);
 
 document.onclick = function (e) {
   consoleInput.focus();
+}
+
+document.onkeypress = function(e) {
+  switch (e.keyCode) {
+    case 13:
+      var command = consoleInput.value;
+      consoleElement.innerHTML += linestart.innerHTML + consoleInput.value + "\n";
+      executeCommand(command);
+      consoleInput.value = "";
+      break;
+    default:
+
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -48,9 +89,6 @@ document.addEventListener("DOMContentLoaded", function() {
   addText("[HTML] loading style.css... 100%\n"+
           "[HTML] loading main.js... 100%\n"+
           "[HTML] this site took " + timeTook / 1000  + " seconds to load\n\n"+
-          "Type login <username>\n");
+          "Type login <username> to login\n");
 
-  // getIp(function (ip) {
-  //   addText("New user connected from " + ip.city + ", " + ip.region_code + ", " + ip.country_code + ". IP: " + ip.ip + "\n");
-  // });
 });
