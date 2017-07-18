@@ -52,11 +52,12 @@ function executeCommand(command) {
       if (args[0] == null) {
         addText("Usage: login <username>\n");
       } else {
-        addText("Successfully logged in as '" + args[0] + "'.\n");
+        var username = args[0].slice(0, 32);
+        addText("Successfully logged in as '" + username + "'.\n");
         getIp(function(ip) {
           addText("New user connected from " + ip.city + ", " + ip.region_code + ", " + ip.country_code + ". IP: " + ip.ip + "\n");
         });
-        linestart.innerHTML = args[0] + "@delivator.me:~$&nbsp";
+        linestart.innerHTML = username + "@delivator.me:~$&nbsp";
       }
       break;
     case "clear":
@@ -65,8 +66,26 @@ function executeCommand(command) {
     case "reload":
       location.reload();
       break;
+    case "echo":
+      var text = command.substring(5);
+      addText(text + "\n");
+      break;
     case "goto":
-      window.location = args[0];
+      if (args[0] == null) {
+        addText("Usage: goto <full url with http/https>\n");
+      } else {
+        addText('Redirecting to "' + args[0] + '"\n');
+        window.location = args[0];
+      }
+      break;
+    case "background":
+    if (args[0] == null) {
+      addText("Usage: background <image-url>\n");
+    } else {
+      addText('Background image changed to "' + args[0] + '"\n');
+      var body = document.getElementsByTagName('body')[0];
+      body.style.backgroundImage = "url(" + args[0] + ")";
+    }
       break;
     default:
   }
