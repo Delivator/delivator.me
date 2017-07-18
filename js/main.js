@@ -87,7 +87,15 @@ function executeCommand(command) {
         body.style.backgroundImage = "url(" + args[0] + ")";
       }
       break;
+    case "ifconfig":
+      getIp(function(ip) {
+        addText("Your ip: " + ip.ip + "\n");
+      });
+      break;
     default:
+      if (command != "") {
+        addText("Command not found. Use help for info.\n");
+      }
   }
 }
 
