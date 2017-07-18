@@ -79,13 +79,13 @@ function executeCommand(command) {
       }
       break;
     case "background":
-    if (args[0] == null) {
-      addText("Usage: background <image-url>\n");
-    } else {
-      addText('Background image changed to "' + args[0] + '"\n');
-      var body = document.getElementsByTagName('body')[0];
-      body.style.backgroundImage = "url(" + args[0] + ")";
-    }
+      if (args[0] == null) {
+        addText("Usage: background <image-url>\n");
+      } else {
+        addText('Background image changed to "' + args[0] + '"\n');
+        var body = document.getElementsByTagName('body')[0];
+        body.style.backgroundImage = "url(" + args[0] + ")";
+      }
       break;
     default:
   }
