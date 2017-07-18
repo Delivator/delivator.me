@@ -22,10 +22,6 @@ body {
   display: flex;
 }
 
-#linestart {
-  margin-right: .5em;
-}
-
 #console {
   margin: 0;
 }

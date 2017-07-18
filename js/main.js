@@ -36,10 +36,13 @@ function getIp(callback) {
 function executeCommand(command) {
   var cmd = command.split(" ")[0],
       args = command.split(" ").slice(1);
-  if (linestart.innerHTML.startsWith("anonymous") && cmd != "login") {
+
+  if (linestart.innerHTML.startsWith("anonymous") && cmd != "login" && command != "") {
     addText("You have to login first.\n");
     addText("Use login <username> to login.\n");
+    return;
   }
+
   switch (cmd) {
     case "login":
       if (!linestart.innerHTML.startsWith("anonymous")) {
@@ -53,8 +56,17 @@ function executeCommand(command) {
         getIp(function(ip) {
           addText("New user connected from " + ip.city + ", " + ip.region_code + ", " + ip.country_code + ". IP: " + ip.ip + "\n");
         });
-        linestart.innerHTML = args[0] + "@delivator.me:~$ ";
+        linestart.innerHTML = args[0] + "@delivator.me:~$&nbsp";
       }
+      break;
+    case "clear":
+      consoleElement.innerHTML = "";
+      break;
+    case "reload":
+      location.reload();
+      break;
+    case "goto":
+      window.location = args[0];
       break;
     default:
   }
