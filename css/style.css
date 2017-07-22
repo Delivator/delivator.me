@@ -26,3 +26,13 @@ body {
 #console {
   margin: 0;
 }
+
+#youtube-player {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+a:visited {
+  color: #0f0;
+}
