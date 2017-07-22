@@ -101,6 +101,21 @@ function executeCommand(command) {
       });
       break;
     case "play":
+      if (args[0] == null) {
+        addText("Usage: play <youtube-url>\n");
+      } else {
+        var videoId = args[0],
+            regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/,
+            match = videoId.match(regExp);
+        if (match && match[2].length == 11) {
+          videoId = match[2];
+          youtubePlayer.innerHTML = '<iframe width="0" height="0" src="https://www.youtube.com/embed/' + videoId + '?autoplay=1" frameborder="0" allowfullscreen></iframe>';
+          addText("Embedding YouTube-Player with the ID: " + videoId + "\n");
+        } else {
+          addText("Invalid YouTube URL\n");
+        }
+      }
+      break;
     case "stop":
       youtubePlayer.innerHTML = "";
       break;
