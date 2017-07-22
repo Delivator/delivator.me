@@ -109,7 +109,7 @@ function executeCommand(command) {
             match = videoId.match(regExp);
         if (match && match[2].length == 11) {
           videoId = match[2];
-          youtubePlayer.innerHTML = '<iframe width="0" height="0" src="http://www.youtube.com/embed/' + videoId + '?autoplay=1" frameborder="0" allowfullscreen></iframe>';
+          youtubePlayer.innerHTML = '<iframe width="0" height="0" src="https://www.youtube.com/embed/' + videoId + '?autoplay=1" frameborder="0" allowfullscreen></iframe>';
           addText("Embedding YouTube-Player with the ID: " + videoId + "\n");
         } else {
           addText("Invalid YouTube URL\n");
