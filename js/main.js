@@ -120,7 +120,7 @@ function executeCommand(command) {
       addText(atob(messages.about) + "\n")
       break;
     case "github":
-      consoleElement.innerHTML += 'Fork me on GitHub: <a href="https://github.com/Delivator/delivator.me">https://github.com/Delivator/delivator.me</a>\n';
+      consoleElement.innerHTML += 'Fork me on GitHub: <a href="https://github.com/Delivator/delivator.me" target="_blank">https://github.com/Delivator/delivator.me</a>\n';
       break;
     default:
       if (command != "") {
