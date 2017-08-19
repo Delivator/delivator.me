@@ -127,7 +127,7 @@ function executeCommand(command) {
       break;
     default:
       if (command != "") {
-        addText("Command not found. Use help for info.\n");
+        addText("Command not found. Use help for a list of all available.\n");
       }
   }
 }
