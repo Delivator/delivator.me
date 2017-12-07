@@ -100,6 +100,8 @@ function executeCommand(command) {
         addText("Your ip: " + ip.ip + "\n");
       });
       break;
+    case "bitcoin":
+      addText("My Bitcoin-adress: 18moT6A2uo3iSVqqgs4cesnDqSbNeNq9Kv");
     case "play":
       if (args[0] == null) {
         addText("Usage: play <youtube-url>\n");
