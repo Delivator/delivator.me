@@ -5,23 +5,8 @@ var lineDrawing = anime({
   duration: 1500,
   delay: function(el, i) { return i * 150 },
   direction: 'alternate',
-  loop: false,
-  autoplay: false
+  loop: false
 });
-
-function getScrollPerc() {
-  let scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
-  let scrollPercentage = scrollTop / document.body.scrollHeight;
-  return scrollPercentage;
-}
-
-function getScrollPercent() {
-  var h = document.documentElement, 
-      b = document.body,
-      st = 'scrollTop',
-      sh = 'scrollHeight';
-  return (h[st]||b[st]) / ((h[sh]||b[sh]) - h.clientHeight);
-}
 
 document.addEventListener("scroll", function() {
   console.log(getScrollPercent());
