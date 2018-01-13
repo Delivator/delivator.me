@@ -1,0 +1,25 @@
+body {
+  background-color: #fff;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: auto 100px 100px 100px auto;
+  grid-template-rows: auto 50px 100px auto;
+  grid-column-gap: 15px;
+  height: 100vh;
+}
+
+
+img {
+  height: 100px;
+  width: 100px;
+}
+
+span {
+  align-self: center;
+  text-align: center;
+  font-family: Arial;
+  font-size: 150%;
+  color: #333;
+}
