@@ -37,7 +37,8 @@ body {
 
 .playerControls {
   display: grid;
-  grid-template-columns: 25px auto;
+  grid-template-columns: 25px auto 80px;
+  grid-column-gap: 10px;
   width: 100%;
   height: 100%;
 }

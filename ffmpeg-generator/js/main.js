@@ -7,6 +7,19 @@ function setCookie(cname, cvalue, exdays) {
   document.cookie = `${cname}=${cvalue};${expires};path=/`;
 }
 
+function convertTime(time) {
+  time = Math.floor(time);
+  let h = Math.floor(time / 60 / 60);
+  let m = Math.floor((time - h * 60 * 60) / 60);
+  let s = time - (h * 60 * 60) - (m * 60);
+  if (s < 10) s = "0" + s;
+  if (h > 0) {
+    return(`${h}:${m}:${s}`);
+  } else {
+    return(`${m}:${s}`);
+  }
+}
+
 function getCookie(cname) {
   let name = cname + "=",
       decodedCookie = decodeURIComponent(document.cookie),
@@ -28,52 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
       videoPlayer = document.querySelector("#videoPlayer"),
       progressBar = document.querySelector("#progressBar"),
       pauseButton = document.querySelector("#playPause"),
-      durationMultiplier;
-
-  if (getCookie("volume") === "") {
-    videoPlayer.volume = 0.5;
-  } else {
-    videoPlayer.volume = getCookie("volume");
-  }
-  
-  videoPlayer.onvolumechange = () => {
-    setCookie("volume", videoPlayer.volume, 356)
-  };
-
-  videoPlayer.oncanplay = () => {
-    videoPlayer.paused ? pauseButton.value = ">" : pauseButton.value = "=";
-  };
-
-  videoPlayer.ondurationchange = () => {
-    let duration = videoPlayer.duration;
-    if (duration > 2000) {
-      durationMultiplier = 1;
-    } else if (duration > 1000) {
-      durationMultiplier = 2;
-    } else {
-      durationMultiplier = 4;
-    }
-    progressBar.max = Math.floor(duration * durationMultiplier);
-  };
-
-  videoPlayer.ontimeupdate = () => {
-    progressBar.value = Math.floor(videoPlayer.currentTime * durationMultiplier);
-  };
-
-  progressBar.addEventListener("change", (event) => {
-    videoPlayer.currentTime = progressBar.value / durationMultiplier;
-  });
-
-  pauseButton.addEventListener("click", (event) => {
-    if (videoPlayer.readyState < 4) return;
-    if (videoPlayer.paused) {
-      videoPlayer.play();
-      pauseButton.value = "=";
-    } else {
-      videoPlayer.pause();
-      pauseButton.value = ">";
-    }
-  });
+      playerTime = document.querySelector("#playerTime"),
+      durationMultiplier,
+      autoResume = false;
 
   function playSelectedFile(event) {
     let file = this.files[0],
@@ -86,6 +56,67 @@ document.addEventListener("DOMContentLoaded", () => {
     let fileUrl = URL.createObjectURL(file);
     videoPlayer.src = fileUrl;
   }
+
+  if (getCookie("volume") === "") {
+    videoPlayer.volume = 0.5;
+  } else {
+    videoPlayer.volume = getCookie("volume");
+  }
+  
+  videoPlayer.onvolumechange = () => {
+    setCookie("volume", videoPlayer.volume, 356)
+  };
+
+  videoPlayer.oncanplay = () => {
+    videoPlayer.paused ? pauseButton.value = "▶" : pauseButton.value = "❚❚";
+  };
+
+  videoPlayer.ondurationchange = () => {
+    let duration = videoPlayer.duration;
+    if (duration > 2000) {
+      durationMultiplier = 1;
+    } else if (duration > 1000) {
+      durationMultiplier = 2;
+    } else {
+      durationMultiplier = 4;
+    }
+    progressBar.max = Math.floor(duration * durationMultiplier);
+    playerTime.innerHTML = `0:00/${convertTime(duration)}`;
+  };
+
+  videoPlayer.ontimeupdate = () => {
+    progressBar.value = Math.floor(videoPlayer.currentTime * durationMultiplier);
+    playerTime.innerHTML = `${convertTime(videoPlayer.currentTime)}/${convertTime(videoPlayer.duration)}`;
+  };
+
+  progressBar.addEventListener("input", event => {
+    videoPlayer.currentTime = progressBar.value / durationMultiplier;
+  });
+
+  progressBar.addEventListener("mousedown", event => {
+    if (!videoPlayer.paused) autoResume = true;
+    videoPlayer.pause();
+    videoPlayer.paused ? pauseButton.value = "▶" : pauseButton.value = "❚❚";
+  });
+
+  progressBar.addEventListener("mouseup", event => {
+    if (autoResume) {
+      autoResume = false;
+      videoPlayer.play();
+    }
+    videoPlayer.paused ? pauseButton.value = "▶" : pauseButton.value = "❚❚";
+  });
+
+  pauseButton.addEventListener("click", event => {
+    if (videoPlayer.readyState < 4) return;
+    if (videoPlayer.paused) {
+      videoPlayer.play();
+      videoPlayer.paused ? pauseButton.value = "▶" : pauseButton.value = "❚❚";
+    } else {
+      videoPlayer.pause();
+      videoPlayer.paused ? pauseButton.value = "▶" : pauseButton.value = "❚❚";
+    }
+  });
   
   let inputNode = document.querySelector("#fileInput");
   inputNode.addEventListener("change", playSelectedFile, false);
