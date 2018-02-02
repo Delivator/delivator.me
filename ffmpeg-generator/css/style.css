@@ -1,0 +1,43 @@
+/* Font import */
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+
+body {
+  font-family: 'Raleway', sans-serif;
+  color: #fefefe;
+  background-color: #212121;
+  margin: 0;
+}
+
+#message {
+  display: inline-block;
+}
+
+#videoPlayer {
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+#progressBar {
+  width: 100%;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 2% auto 2%;
+  grid-template-rows: 2% auto 25px 50px;
+  height: 100vh;
+}
+
+.info {color: #6bff58}
+.error {color: rgb(255, 83, 83)}
+
+.playerControls {
+  display: grid;
+  grid-template-columns: 25px auto;
+  width: 100%;
+  height: 100%;
+}
