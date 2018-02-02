@@ -42,6 +42,8 @@ document.addEventListener("DOMContentLoaded", () => {
       progressBar = document.querySelector("#progressBar"),
       pauseButton = document.querySelector("#playPause"),
       playerTime = document.querySelector("#playerTime"),
+      muteButton = document.querySelector("#mute"),
+      volumeSlider = document.querySelector("#volume"),
       durationMultiplier,
       autoResume = false;
 
@@ -59,16 +61,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (getCookie("volume") === "") {
     videoPlayer.volume = 0.5;
+    volumeSlider.value = 50;
   } else {
     videoPlayer.volume = getCookie("volume");
+    volumeSlider.value = Math.floor(getCookie("volume") * 100);
   }
   
   videoPlayer.onvolumechange = () => {
-    setCookie("volume", videoPlayer.volume, 356)
+    if (videoPlayer.muted || videoPlayer.volume === 0) {
+      muteButton.className = "muted";
+    } else {
+      muteButton.className = "volume";
+    }
+    setCookie("volume", videoPlayer.volume, 356);
   };
 
   videoPlayer.oncanplay = () => {
-    videoPlayer.paused ? pauseButton.value = "▶" : pauseButton.value = "❚❚";
+    videoPlayer.paused ? pauseButton.className = "play" : pauseButton.className = "pause";
   };
 
   videoPlayer.ondurationchange = () => {
@@ -96,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
   progressBar.addEventListener("mousedown", event => {
     if (!videoPlayer.paused) autoResume = true;
     videoPlayer.pause();
-    videoPlayer.paused ? pauseButton.value = "▶" : pauseButton.value = "❚❚";
+    videoPlayer.paused ? pauseButton.className = "play" : pauseButton.className = "pause";
   });
 
   progressBar.addEventListener("mouseup", event => {
@@ -104,18 +113,26 @@ document.addEventListener("DOMContentLoaded", () => {
       autoResume = false;
       videoPlayer.play();
     }
-    videoPlayer.paused ? pauseButton.value = "▶" : pauseButton.value = "❚❚";
+    videoPlayer.paused ? pauseButton.className = "play" : pauseButton.className = "pause";
   });
 
   pauseButton.addEventListener("click", event => {
     if (videoPlayer.readyState < 4) return;
     if (videoPlayer.paused) {
       videoPlayer.play();
-      videoPlayer.paused ? pauseButton.value = "▶" : pauseButton.value = "❚❚";
+      videoPlayer.paused ? pauseButton.className = "play" : pauseButton.className = "pause";
     } else {
       videoPlayer.pause();
-      videoPlayer.paused ? pauseButton.value = "▶" : pauseButton.value = "❚❚";
+      videoPlayer.paused ? pauseButton.className = "play" : pauseButton.className = "pause";
     }
+  });
+
+  muteButton.addEventListener("click", event => {
+    videoPlayer.muted = !videoPlayer.muted;
+  });
+
+  volumeSlider.addEventListener("input", event => {
+    videoPlayer.volume = volumeSlider.value / 100;
   });
   
   let inputNode = document.querySelector("#fileInput");

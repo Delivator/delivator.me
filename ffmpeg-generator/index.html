@@ -15,12 +15,16 @@
     <div style="grid-row: 3; grid-column: 2;">
       <div class="playerControls">
         <div style="grid-column: 1;">
-          <input id="playPause" type="button" value="&#9654;">
+          <input id="playPause" type="button" value=" " class="play">
         </div>
-        <div style="grid-column: 2;">
-          <input id="progressBar" type="range" min="0" max="0" value="0">
+        <div style="grid-column: 2; position: relative;">
+          <input id="mute" type="button" value=" " class="volume">
+          <input id="volume" type="range" min="0" max="100" value="50">
         </div>
         <div style="grid-column: 3;">
+          <input id="progressBar" type="range" min="0" max="0" value="0">
+        </div>
+        <div style="grid-column: 4;">
           <span id="playerTime">0:00/0:00</span>
         </div>
       </div>
