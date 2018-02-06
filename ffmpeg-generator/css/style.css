@@ -216,7 +216,8 @@ label img {
   padding: 10px;
 }
 
-.modal-output span {
+.modal-output pre {
   word-wrap: break-word;
   font-family: Courier New, Courier, monospace;
+  white-space: pre-wrap;
 }
