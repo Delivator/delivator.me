@@ -38,12 +38,23 @@ function getCookie(cname) {
 
 document.addEventListener("DOMContentLoaded", () => {
   let url = window.URL || window.webkitURL,
+      inputNode = document.querySelector("#fileInput"),
       videoPlayer = document.querySelector("#videoPlayer"),
       progressBar = document.querySelector("#progressBar"),
       pauseButton = document.querySelector("#playPause"),
       playerTime = document.querySelector("#playerTime"),
       muteButton = document.querySelector("#mute"),
       volumeSlider = document.querySelector("#volume"),
+      startTime = document.querySelector("#startTime"),
+      endTime = document.querySelector("#endTime"),
+      startTimeBtn = document.querySelector("#startTime-btn"),
+      endTimeBtn = document.querySelector("#endTime-btn"),
+      markerStart = document.querySelector("#marker-start"),
+      markerEnd = document.querySelector("#marker-end"),
+      generateBtn = document.querySelector("#generate"),
+      mainDiv = document.querySelector("#main"),
+      modal = document.querySelector("#modal"),
+      output = document.querySelector("#output"),
       durationMultiplier,
       autoResume = false;
 
@@ -91,13 +102,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     progressBar.max = Math.floor(duration * durationMultiplier);
     playerTime.innerHTML = `0:00/${convertTime(duration)}`;
+    startTime.max = duration;
+    endTime.max = duration;
+    endTime.value = duration;
+    startTime.value = 0;
+    startTimeEvent();
+    endTimeEvent();
   };
 
   videoPlayer.ontimeupdate = () => {
     progressBar.value = Math.floor(videoPlayer.currentTime * durationMultiplier);
     playerTime.innerHTML = `${convertTime(videoPlayer.currentTime)}/${convertTime(videoPlayer.duration)}`;
+    if (videoPlayer.currentTime > endTime.value) videoPlayer.currentTime = startTime.value;
+    if (videoPlayer.currentTime < startTime.value) videoPlayer.currentTime = startTime.value;
   };
 
+  inputNode.addEventListener("change", playSelectedFile, false);
+  
   progressBar.addEventListener("input", event => {
     videoPlayer.currentTime = progressBar.value / durationMultiplier;
   });
@@ -134,8 +155,56 @@ document.addEventListener("DOMContentLoaded", () => {
   volumeSlider.addEventListener("input", event => {
     videoPlayer.volume = volumeSlider.value / 100;
   });
-  
-  let inputNode = document.querySelector("#fileInput");
-  inputNode.addEventListener("change", playSelectedFile, false);
+
+  function startTimeEvent() {
+    if (parseFloat(startTime.value) > startTime.max) startTime.value = startTime.max;
+    videoPlayer.pause();
+    videoPlayer.currentTime = startTime.value;
+    if (parseFloat(startTime.value) > parseFloat(endTime.value)) endTime.value = startTime.value;
+    endTime.min = startTime.value;
+    let procent = startTime.value / videoPlayer.duration * 100;
+    markerStart.style.left = `calc(${procent}% - 12px)`;
+  }
+
+  startTime.addEventListener("input", startTimeEvent);
+  startTime.addEventListener("change", startTimeEvent);
+  startTime.addEventListener("keyup", startTimeEvent);
+
+  function endTimeEvent() {
+    if (parseFloat(endTime.value) > endTime.max) endTime.value = endTime.max;
+    videoPlayer.pause();
+    videoPlayer.currentTime = endTime.value;
+    if (parseFloat(startTime.value) > parseFloat(endTime.value)) endTime.value = startTime.value;
+    let procent = endTime.value / videoPlayer.duration * 100;
+    markerEnd.style.left = `calc(${procent}% - 12px)`;
+  }
+
+  endTime.addEventListener("input", endTimeEvent);
+  endTime.addEventListener("change", endTimeEvent);
+  endTime.addEventListener("keyup", endTimeEvent);
+
+  startTimeBtn.addEventListener("click", event => {
+    startTime.value = videoPlayer.currentTime;
+    startTimeEvent();
+  });
+
+  endTimeBtn.addEventListener("click", event => {
+    endTime.value = videoPlayer.currentTime;
+    endTimeEvent();
+  });
+
+  generateBtn.addEventListener("click", event => {
+    mainDiv.classList.toggle("blurred");
+    modal.classList.toggle("modal-toggled");
+    let fileName = document.querySelector("#fileInput").value.split(/(\\|\/)/g).pop();
+    let command = `ffmpeg -i "${fileName}" -ss ${startTime.value} -t ${endTime.value - startTime.value} outputfile.mp4`;
+    output.innerHTML = command;
+  });
+
+  modal.addEventListener("click", event => {
+    if (event.target !== modal) return;
+    mainDiv.classList.toggle("blurred");
+    modal.classList.toggle("modal-toggled");
+  });
 });
 
