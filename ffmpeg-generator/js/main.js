@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
     mainDiv.classList.toggle("blurred");
     modal.classList.toggle("modal-toggled");
     let fileName = document.querySelector("#fileInput").value.split(/(\\|\/)/g).pop();
-    let command = `ffmpeg -i "${fileName}" -ss ${startTime.value} -t ${endTime.value - startTime.value} outputfile.mp4`;
+    let command = `ffmpeg -i "${fileName}" -ss ${startTime.value} -t ${endTime.value - startTime.value} -vf "scale=1920x1080,setdar=16:9" outputfile.mp4`;
     output.innerHTML = command;
   });
 
