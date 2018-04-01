@@ -1,0 +1,16 @@
+body {
+  margin: 0;
+}
+
+.checkboxes p {
+  display: inline;
+  margin-right: 1rem !important;
+}
+
+.option {
+  margin-top: 1rem;
+}
+
+#output {
+  word-wrap: break-word;
+}
