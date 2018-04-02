@@ -14,3 +14,7 @@ body {
 #output {
   word-wrap: break-word;
 }
+
+#presetName {
+  padding: .25rem;
+}

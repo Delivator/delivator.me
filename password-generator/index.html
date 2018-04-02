@@ -25,7 +25,32 @@
       <p>This cannot be undone!</p>
     </div>
     <div class="modal-footer">
-      <a class=" red btn waves-effect" onclick="reset()">Reset</a>
+      <a class="red btn waves-effect" onclick="reset()">Reset</a>
+      <a class="modal-action modal-close btn waves-effect">Cancle</a>
+    </div>
+  </div>
+  <div id="removePresetModal" class="modal">
+    <div class="modal-content">
+      <h4>Are you sure you want to delete this preset?</h4>
+      <p><span class="color grey" id="presetName">{preset.name}</span> is going to be removed from your presets!</p>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-action modal-close red btn waves-effect" onclick="removePreset()">Delete</a>
+      <a class="modal-action modal-close btn waves-effect">Cancle</a>
+    </div>
+  </div>
+  <div id="addPresetModal" class="modal">
+    <div class="modal-content">
+      <h4>Please select a name for the preset:</h4>
+      <br>
+      <div class="input-field">
+        <input type="text" id="presetNameInput">
+        <label for="additional">Preset name:</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a class="green btn waves-effect" onclick="addPreset()">Add</a>
+      <a class="modal-action modal-close btn waves-effect">Cancle</a>
     </div>
   </div>
   <div class="container">
@@ -36,10 +61,14 @@
             <span class="card-title">Password Generator</span>
           </div>
           <div class="card-content">
-            <div class="input-field">
-              <select id="presets" onchange="loadPreset()">
-              </select>
-              <label>Select a preset:</label>
+            <div>
+              <div class="input-field">
+                <select id="presets" onchange="loadPreset()">
+                </select>
+                <label>Select a preset:</label>
+              </div>
+              <a class="btn waves-effect waves-light modal-trigger" href="#addPresetModal"><i class="material-icons">add</i></a>
+              <a class="btn waves-effect waves-light red" onclick="updateModalText()"><i class="material-icons">delete</i></a>
             </div>
             <br>
             <label>Chars:</label><br>
@@ -78,8 +107,8 @@
             </div>
             <div class="option">
               <div class="input-field">
-                <input type="text" id="additional">
-                <label for="additional">Additinal characters:</label>
+                <input type="text" id="additional" oninput="generate()">
+                <label for="additional">Additional characters:</label>
               </div>
             </div>
             <br>

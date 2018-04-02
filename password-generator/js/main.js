@@ -5,6 +5,41 @@ const dic = {
   special: "!#$%&()*+,-.:;<>=?@[]_"
 };
 
+const version = "1.1";
+
+const defaultSettings = {
+  version: version,
+  presets: [{
+    name: "Default",
+    az: true,
+    AZ: true,
+    dig: true,
+    special: false,
+    leng: 16,
+    additional: "",
+    isDefault: true
+  }, {
+    name: "All",
+    az: true,
+    AZ: true,
+    dig: true,
+    special: true,
+    leng: 16,
+    additional: "",
+    isDefault: true
+  }, {
+    name: "Emoji 😂",
+    az: false,
+    AZ: false,
+    dig: false,
+    special: false,
+    leng: 16,
+    additional: "😀😁😂🤣😃😄😅😆😉😊😋😎😍😘😗😙😚☺️🙂🤗🤩🤔🤨😐😑😶🙄😏😣😥😮🤐😯😪😫😴😌😛😜😝🤤😒😓😔😕🙃🤑😲☹️🙁😖😞😟😤😢😭😦😧😨😩🤯😬😰😱😳🤪😵😡😠🤬😷🤒🤕🤢🤮🤧😇🤠🤡🤥🤫🤭🧐🤓😈👿👹👺💀👻👽🤖💩😺😸😹😻😼😽🙀😿😾💪👈👉☝️👆🖕👇✌️🤞🖖🤘🖐✋👌👍👎✊👊🤛🤜🤚👋🤟✍️👏👐🙌🤲🙏🤝💅👂👃👣👀👁🧠👅👄💋❤️💛💚💙💜🖤💔❣️💕💞💓💗💖💘💝💟💯",
+    isDefault: true
+  }]
+};
+
+let settings = localStorage.getItem("settings");
 let randomDic = "";
 
 function get(id) {
@@ -27,7 +62,9 @@ let check_az = get("az"),
     leng = get("length"),
     additional = get("additional"),
     select_presets = get("presets"),
-    output = get("output");
+    output = get("output"),
+    presetName = get("presetName"),
+    presetNameInput = get("presetNameInput");
 
 output.onclick = () => {
   document.execCommand("copy");
@@ -54,6 +91,7 @@ function loadPreset(preset) {
 }
 
 function loadPresets() {
+  presets.innerHTML = "";
   for (let i = 0; i < settings.presets.length; i++) {
     let option = document.createElement("option");
     option.text = settings.presets[i].name;
@@ -84,44 +122,74 @@ function reset() {
   location.reload();
 }
 
-let settings = localStorage.getItem("settings");
+function addPreset() {
+  let modal = M.Modal.getInstance(get("addPresetModal"));
+  let name = presetNameInput.value;
+  if (name === "") {
+    M.toast({html: "Preset name can't be empty!", classes: "red"});
+    return;
+  } else {
+    let preset = {
+      name: name,
+      az: check_az.checked,
+      AZ: check_AZ.checked,
+      dig: check_dig.checked,
+      special: check_special.checked,
+      leng: leng.value,
+      additional: additional.value
+    };
+    settings.presets.push(preset);
+    localStorage.setItem("settings", JSON.stringify(settings));
+    loadPreset(settings.presets[settings.presets.length - 1]);
+    loadPresets();
+    presets.value = name;
+    M.FormSelect.init(presets);
+    generate();
+    M.toast({html: name + " has been added to the presets!", classes: "green"});
+    presetNameInput.value = "";
+    M.updateTextFields();
+    modal.close();
+  }
+}
+
+function removePreset() {
+  let name = settings.presets[presets.selectedIndex].name;
+  presetName.innerText = "name";
+  settings.presets.splice(presets.selectedIndex, 1);
+  localStorage.setItem("settings", JSON.stringify(settings));
+  loadPreset(settings.presets[0]);
+  loadPresets();
+  presets.value = settings.presets[0].name;
+  M.FormSelect.init(presets);
+  generate();
+  M.toast({html: name + " has been removed from the presets!", classes: "red"});
+}
+
+function updateModalText() {
+  let modal = M.Modal.getInstance(get("removePresetModal"));
+  let name = settings.presets[presets.selectedIndex].name;
+  if (settings.presets[presets.selectedIndex].isDefault) {
+    M.toast({html: "You can't delte default presets!", classes: "red"});
+    return;
+  }
+  presetName.innerText = name;
+  modal.open();
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   M.AutoInit();
 
   if (!settings) {
-    settings = {
-      version: "1.0",
-      presets: [{
-        name: "Default",
-        az: true,
-        AZ: true,
-        dig: true,
-        special: false,
-        leng: 16,
-        additional: ""
-      }, {
-        name: "All",
-        az: true,
-        AZ: true,
-        dig: true,
-        special: true,
-        leng: 16,
-        additional: ""
-      }, {
-        name: "Emoji 😂",
-        az: false,
-        AZ: false,
-        dig: false,
-        special: false,
-        leng: 16,
-        additional: "😀😁😂🤣😃😄😅😆😉😊😋😎😍😘😗😙😚☺️🙂🤗🤩🤔🤨😐😑😶🙄😏😣😥😮🤐😯😪😫😴😌😛😜😝🤤😒😓😔😕🙃🤑😲☹️🙁😖😞😟😤😢😭😦😧😨😩🤯😬😰😱😳🤪😵😡😠🤬😷🤒🤕🤢🤮🤧😇🤠🤡🤥🤫🤭🧐🤓😈👿👹👺💀👻👽🤖💩😺😸😹😻😼😽🙀😿😾🤳💪👈👉☝️👆🖕👇✌️🤞🖖🤘🖐✋👌👍👎✊👊🤛🤜🤚👋🤟✍️👏👐🙌🤲🙏🤝💅👂👃👣👀👁🧠👅👄💋"
-      }]
-    }
+    settings = defaultSettings;
     localStorage.setItem("settings", JSON.stringify(settings));
 
   } else {
     settings = JSON.parse(localStorage.getItem("settings"));
+    if (settings.version != version) {
+      settings = defaultSettings;
+      localStorage.setItem("settings", JSON.stringify(settings));
+      M.toast({html: "Version updated. Settings resetted!", classes: "yellow darken-2"});
+    }
   }
   console.log(settings);
   loadPreset(settings.presets[0]);
