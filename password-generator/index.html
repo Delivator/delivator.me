@@ -7,16 +7,18 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dark-theme.css" id="dark-theme">
+  <link rel="shortcut icon" href="img/icon.png" type="image/png">
   <title>Password Generator</title>
 </head>
 <body>
   <div class="fixed-action-btn">
-    <a class="btn-floating btn-large blue darken-3">
+    <a class="btn-floating btn-large blue darken-3 tooltipped" data-position="left" data-tooltip="Settings">
       <i class="large material-icons">settings</i>
     </a>
     <ul>
-      <li><a class="btn-floating red  modal-trigger" href="#resetModal"><i class="material-icons">replay</i></a></li>
-      <li><a class="btn-floating grey darken-3"><i class="material-icons">brightness_low</i></a></li>
+      <li><a class="btn-floating red  modal-trigger tooltipped" data-position="left" data-tooltip="Reset" href="#resetModal"><i class="material-icons">replay</i></a></li>
+      <li><a class="btn-floating grey darken-3 tooltipped" data-position="left" data-tooltip="Switch Theme" onclick="toggleTheme()"><i class="material-icons">brightness_low</i></a></li>
     </ul>
   </div>
   <div id="resetModal" class="modal">
@@ -112,8 +114,12 @@
               </div>
             </div>
             <br>
+            <p>Used characters: </p>
+            <blockquote id="characters"></blockquote>
+            <br>
             <a class="waves-effect waves-light btn" onclick="generate()">Generate</a>
             <br>
+            <h5>Password:</h5>
             <blockquote id="output" class="blue-grey lighten-5 tooltipped" data-position="top" data-tooltip="Click to copy to clipboard"></blockquote>
           </div>
         </div>

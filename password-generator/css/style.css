@@ -13,8 +13,20 @@ body {
 
 #output {
   word-wrap: break-word;
+  font-size: 1.25rem;
+  font-family: monospace;
 }
 
 #presetName {
   padding: .25rem;
+}
+
+#characters {
+  white-space: nowrap;
+  overflow: auto;
+}
+
+#characters:hover {
+  white-space: normal;
+  word-wrap: break-word;
 }

@@ -5,10 +5,11 @@ const dic = {
   special: "!#$%&()*+,-.:;<>=?@[]_"
 };
 
-const version = "1.1";
+const version = "1.2";
 
 const defaultSettings = {
   version: version,
+  theme: "light",
   presets: [{
     name: "Default",
     az: true,
@@ -64,7 +65,8 @@ let check_az = get("az"),
     select_presets = get("presets"),
     output = get("output"),
     presetName = get("presetName"),
-    presetNameInput = get("presetNameInput");
+    presetNameInput = get("presetNameInput"),
+    characters = get("characters");
 
 output.onclick = () => {
   document.execCommand("copy");
@@ -77,6 +79,10 @@ output.addEventListener("copy", (event) => {
     M.toast({html: "Password copied to clipboard!", classes: "green", displayLength: 3000});
   }
 });
+
+function saveSettings() {
+  localStorage.setItem("settings", JSON.stringify(settings));
+}
 
 function loadPreset(preset) {
   if (!preset) preset = settings.presets[presets.selectedIndex];
@@ -111,6 +117,7 @@ function updateDic() {
 
 function generate() {
   updateDic();
+  characters.innerText = randomDic;
   if (randomDic === "") return M.toast({html: "Used characters can't be empty!", classes: "red"});
   if (leng.value < 1) return M.toast({html: "Password length must be atleast 1!", classes: "red"});
   let pw = generatePassword(randomDic, leng.value);
@@ -139,7 +146,7 @@ function addPreset() {
       additional: additional.value
     };
     settings.presets.push(preset);
-    localStorage.setItem("settings", JSON.stringify(settings));
+    saveSettings();
     loadPreset(settings.presets[settings.presets.length - 1]);
     loadPresets();
     presets.value = name;
@@ -156,7 +163,7 @@ function removePreset() {
   let name = settings.presets[presets.selectedIndex].name;
   presetName.innerText = "name";
   settings.presets.splice(presets.selectedIndex, 1);
-  localStorage.setItem("settings", JSON.stringify(settings));
+  saveSettings();
   loadPreset(settings.presets[0]);
   loadPresets();
   presets.value = settings.presets[0].name;
@@ -176,23 +183,44 @@ function updateModalText() {
   modal.open();
 }
 
+function loadTheme() {
+  if (settings.theme === "dark") {
+    get("dark-theme").disabled = false;
+  } else {
+    get("dark-theme").disabled = true;
+  }
+}
+
+function toggleTheme() {
+  if (settings.theme === "dark") {
+    settings.theme = "light";
+    saveSettings();
+    loadTheme();
+  } else {
+    settings.theme = "dark";
+    saveSettings();
+    loadTheme();
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   M.AutoInit();
 
   if (!settings) {
     settings = defaultSettings;
-    localStorage.setItem("settings", JSON.stringify(settings));
+    saveSettings();
 
   } else {
     settings = JSON.parse(localStorage.getItem("settings"));
     if (settings.version != version) {
       settings = defaultSettings;
-      localStorage.setItem("settings", JSON.stringify(settings));
-      M.toast({html: "Version updated. Settings resetted!", classes: "yellow darken-2"});
+      saveSettings();
+      M.toast({html: "Version updated. Settings resetted!", classes: "yellow darken-2", displayLength: 10000});
     }
   }
   console.log(settings);
   loadPreset(settings.presets[0]);
   loadPresets();
   generate();
+  loadTheme();
 });
