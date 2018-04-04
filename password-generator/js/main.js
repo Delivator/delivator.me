@@ -5,7 +5,7 @@ const dic = {
   special: "!#$%&()*+,-.:;<>=?@[]_"
 };
 
-const version = "1.2";
+const version = "1.3";
 
 const defaultSettings = {
   version: version,
@@ -29,7 +29,7 @@ const defaultSettings = {
     additional: "",
     isDefault: true
   }, {
-    name: "Emoji 😂",
+    name: "Emoji 🔐",
     az: false,
     AZ: false,
     dig: false,
