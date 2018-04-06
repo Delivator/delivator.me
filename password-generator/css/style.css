@@ -30,3 +30,11 @@ body {
   white-space: normal;
   word-wrap: break-word;
 }
+
+.number {
+  color: #e65100;
+}
+
+.special {
+  color: #00c853;
+}

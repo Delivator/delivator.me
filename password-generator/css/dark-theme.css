@@ -30,3 +30,11 @@ label {
 .dropdown-content {
   background-color: #616161 !important;
 }
+
+.number {
+  color: #e64a19;
+}
+
+.special {
+  color: #01579b;
+}

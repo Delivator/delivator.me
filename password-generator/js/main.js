@@ -5,7 +5,7 @@ const dic = {
   special: "!#$%&()*+,-.:;<>=?@[]_"
 };
 
-const version = "1.3";
+const version = "1.4";
 
 const defaultSettings = {
   version: version,
@@ -115,13 +115,30 @@ function updateDic() {
   if (additional.value) randomDic += additional.value;
 }
 
+function textToHTML(text) {
+  if (text.length > 1000) return text;
+  text = [...text];
+  let formattedHTML = "";
+
+  text.forEach(c => {
+    if (dic.dig.includes(c)) {
+      formattedHTML += '<span class="number">' + c + '</span>';
+    } else if (!(dic.az + dic.AZ).includes(c) && !dic.dig.includes(c)) {
+      formattedHTML += '<span class="special">' + c + '</span>';
+    } else {
+      formattedHTML += c;
+    }
+  });
+  return formattedHTML;
+}
+
 function generate() {
   updateDic();
   characters.innerText = randomDic;
   if (randomDic === "") return M.toast({html: "Used characters can't be empty!", classes: "red"});
-  if (leng.value < 1) return M.toast({html: "Password length must be atleast 1!", classes: "red"});
+  if (leng.value < 1 || leng.value > 100000) return M.toast({html: "Password length can be 1-100000 characters long!", classes: "red"});
   let pw = generatePassword(randomDic, leng.value);
-  output.innerText = pw;
+  output.innerHTML = textToHTML(pw);
 }
 
 function reset() {
