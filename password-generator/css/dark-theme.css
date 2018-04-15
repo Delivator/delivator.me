@@ -38,3 +38,7 @@ label {
 .special {
   color: #01579b;
 }
+
+svg.caret {
+  fill: white !important;
+}
