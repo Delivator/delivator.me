@@ -23,7 +23,8 @@ body {
 
 #characters {
   white-space: nowrap;
-  overflow: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #characters:hover {
