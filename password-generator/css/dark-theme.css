@@ -35,10 +35,6 @@ label {
   color: #e64a19;
 }
 
-.special {
-  color: #01579b;
-}
-
 svg.caret {
   fill: white !important;
 }

@@ -57,16 +57,16 @@ function generatePassword(chars, length) {
 }
 
 let check_az = get("az"),
-    check_AZ = get("AZ"),
-    check_dig = get("dig"),
-    check_special = get("special"),
-    leng = get("length"),
-    additional = get("additional"),
-    select_presets = get("presets"),
-    output = get("output"),
-    presetName = get("presetName"),
-    presetNameInput = get("presetNameInput"),
-    characters = get("characters");
+  check_AZ = get("AZ"),
+  check_dig = get("dig"),
+  check_special = get("special"),
+  leng = get("length"),
+  additional = get("additional"),
+  select_presets = get("presets"),
+  output = get("output"),
+  presetName = get("presetName"),
+  presetNameInput = get("presetNameInput"),
+  characters = get("characters");
 
 output.onclick = () => {
   document.execCommand("copy");
@@ -76,7 +76,7 @@ output.addEventListener("copy", (event) => {
   event.preventDefault();
   if (event.clipboardData) {
     event.clipboardData.setData("text/plain", output.innerText);
-    M.toast({html: "Password copied to clipboard!", classes: "green", displayLength: 3000});
+    M.toast({ html: "Password copied to clipboard!", classes: "green", displayLength: 3000 });
   }
 });
 
@@ -135,8 +135,8 @@ function textToHTML(text) {
 function generate() {
   updateDic();
   characters.innerText = randomDic;
-  if (randomDic === "") return M.toast({html: "Used characters can't be empty!", classes: "red"});
-  if (leng.value < 1 || leng.value > 100000) return M.toast({html: "Password length can be 1-100000 characters long!", classes: "red"});
+  if (randomDic === "") return M.toast({ html: "Used characters can't be empty!", classes: "red" });
+  if (leng.value < 1 || leng.value > 100000) return M.toast({ html: "Password length can be 1-100000 characters long!", classes: "red" });
   let pw = generatePassword(randomDic, leng.value);
   output.innerHTML = textToHTML(pw);
 }
@@ -150,7 +150,7 @@ function addPreset() {
   let modal = M.Modal.getInstance(get("addPresetModal"));
   let name = presetNameInput.value;
   if (name === "") {
-    M.toast({html: "Preset name can't be empty!", classes: "red"});
+    M.toast({ html: "Preset name can't be empty!", classes: "red" });
     return;
   } else {
     let preset = {
@@ -169,7 +169,7 @@ function addPreset() {
     presets.value = name;
     M.FormSelect.init(presets);
     generate();
-    M.toast({html: name + " has been added to the presets!", classes: "green"});
+    M.toast({ html: name + " has been added to the presets!", classes: "green" });
     presetNameInput.value = "";
     M.updateTextFields();
     modal.close();
@@ -186,14 +186,14 @@ function removePreset() {
   presets.value = settings.presets[0].name;
   M.FormSelect.init(presets);
   generate();
-  M.toast({html: name + " has been removed from the presets!", classes: "red"});
+  M.toast({ html: name + " has been removed from the presets!", classes: "red" });
 }
 
 function updateModalText() {
   let modal = M.Modal.getInstance(get("removePresetModal"));
   let name = settings.presets[presets.selectedIndex].name;
   if (settings.presets[presets.selectedIndex].isDefault) {
-    M.toast({html: "You can't delte default presets!", classes: "red"});
+    M.toast({ html: "You can't delte default presets!", classes: "red" });
     return;
   }
   presetName.innerText = name;
@@ -226,16 +226,15 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!settings) {
     settings = defaultSettings;
     saveSettings();
-
   } else {
     settings = JSON.parse(localStorage.getItem("settings"));
     if (settings.version != version) {
       settings = defaultSettings;
       saveSettings();
-      M.toast({html: "Version updated. Settings resetted!", classes: "yellow darken-2", displayLength: 10000});
+      M.toast({ html: "Version updated. Settings resetted!", classes: "yellow darken-2", displayLength: 10000 });
     }
   }
-  console.log(settings);
+
   loadPreset(settings.presets[0]);
   loadPresets();
   generate();
